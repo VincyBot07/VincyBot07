@@ -88,11 +88,11 @@ class Plugin:
 
 class Plugins(commands.Cog):
     """
-    Plugins expand Modmail functionality by allowing third-party addons.
+    I plugin espandono le funzionalità del VincyBot07 aggiungendo estensioni di terze parti.
 
-    These addons could have a range of features from moderation to simply
-    making your life as a moderator easier!
-    Learn how to create a plugin yourself here:
+    Questi addon potrebbero avere un numero di funzioni da moderazione a semplici
+    rendendo la tua vita da moderatore più facile!
+    Impara come creare il tuo plugin qui:
     https://github.com/kyb3r/modmail/wiki/Plugins
     """
 
@@ -103,6 +103,7 @@ class Plugins(commands.Cog):
         self._ready_event = asyncio.Event()
 
         self.bot.loop.create_task(self.populate_registry())
+        self.bot.loop.create_task(self.populate_vregistry())
 
         if self.bot.config.get("enable_plugins"):
             self.bot.loop.create_task(self.initial_load_plugins())
@@ -115,8 +116,8 @@ class Plugins(commands.Cog):
             self.registry = json.loads(await resp.text())
 
     async def populate_vregistry(self):
-        url = "http://vincysuper07.cf/bot/plugin.json"
-        async with self.bot.session.get(url) as resp:
+        vurl = "http://vincysuper07.cf/bot/plugin.json"
+        async with self.bot.session.get(vurl) as resp:
             self.registry = json.loads(await resp.text())
 
     async def initial_load_plugins(self):
@@ -153,10 +154,10 @@ class Plugins(commands.Cog):
                 await self.download_plugin(plugin)
                 await self.load_plugin(plugin)
             except Exception:
-                logger.error("Error when loading plugin %s.", plugin, exc_info=True)
+                logger.error("Non è stato possibile caricare %s.", plugin, exc_info=True)
                 continue
 
-        logger.debug("Finished loading all plugins.")
+        logger.debug("Ho finito di caricare tutti i plugin.")
         self._ready_event.set()
         await self.bot.config.update()
 
@@ -168,11 +169,11 @@ class Plugins(commands.Cog):
 
         if plugin.cache_path.exists() and not force:
             plugin_io = plugin.cache_path.open("rb")
-            logger.debug("Loading cached %s.", plugin.cache_path)
+            logger.debug("Sto caricando %s dalla cache.", plugin.cache_path)
 
         else:
             async with self.bot.session.get(plugin.url) as resp:
-                logger.debug("Downloading %s.", plugin.url)
+                logger.debug("Sto scaricando %s.", plugin.url)
                 raw = await resp.read()
                 plugin_io = io.BytesIO(raw)
                 if not plugin.cache_path.parent.exists():
@@ -212,7 +213,7 @@ class Plugins(commands.Cog):
                 stdout=PIPE,
             )
 
-            logger.debug("Downloading requirements for %s.", plugin.ext_string)
+            logger.debug("Sto scaricando i requisiti per %s.", plugin.ext_string)
 
             stdout, stderr = await proc.communicate()
 
@@ -222,10 +223,10 @@ class Plugins(commands.Cog):
             if stderr:
                 logger.debug("[stderr]\n%s.", stderr.decode())
                 logger.error(
-                    "Failed to download requirements for %s.", plugin.ext_string, exc_info=True
+                    "Non è stato possibile scaricare i requisiti per %s.", plugin.ext_string, exc_info=True
                 )
                 raise InvalidPluginError(
-                    f"Unable to download requirements: ```\n{stderr.decode()}\n```"
+                    f"Non è stato possibile scaricare i requisiti: ```\n{stderr.decode()}\n```"
                 )
 
             if os.path.exists(USER_SITE):
@@ -233,18 +234,18 @@ class Plugins(commands.Cog):
 
         try:
             self.bot.load_extension(plugin.ext_string)
-            logger.info("Loaded plugin: %s", plugin.ext_string.split(".")[-1])
+            logger.info("Il plugin \"%s\" è stato caricato.", plugin.ext_string.split(".")[-1])
             self.loaded_plugins.add(plugin)
 
         except commands.ExtensionError as exc:
-            logger.error("Plugin load failure: %s", plugin.ext_string, exc_info=True)
-            raise InvalidPluginError("Cannot load extension, plugin invalid.") from exc
+            logger.error("Non è stato possibile caricare il plugin: %s", plugin.ext_string, exc_info=True)
+            raise InvalidPluginError("Non è stato possibile caricare l'estensione, il plugin non è valido.") from exc
 
     async def parse_user_input(self, ctx, plugin_name, check_version=False):
 
         if not self._ready_event.is_set():
             embed = discord.Embed(
-                description="Plugins are still loading, please try again later.",
+                description="Sto ancora caricando alcuni plugin, per favore, riprova più tardi.",
                 color=self.bot.main_color,
             )
             await ctx.send(embed=embed)
@@ -260,8 +261,8 @@ class Plugins(commands.Cog):
 
                 if required_version and self.bot.version < parse_version(required_version):
                     embed = discord.Embed(
-                        description="Your bot's version is too low. "
-                        f"This plugin requires version `{required_version}`.",
+                        description="La versione del bot è troppo bassa. "
+                        f"Questo plugin richiede la versione `{required_version}`.",
                         color=self.bot.error_color,
                     )
                     await ctx.send(embed=embed)
@@ -274,9 +275,11 @@ class Plugins(commands.Cog):
                 plugin = Plugin.from_string(plugin_name)
             except InvalidPluginError:
                 embed = discord.Embed(
-                    description="Invalid plugin name,double check the plugin name "
-                    "or use one of the following formats: "
-                    "username/repo/plugin, username/repo/plugin@branch.",
+                    description="Il nome del plugin non è valido, ricontrolla il nome del plugin "
+                    "oppure usa uno dei seguenti formati: "
+                    "username/repo/plugin, username/repo/plugin@branch.\n"
+                    f"(nota da Vincysuper07: prova a fare prima `{ctx.prefix}vplugins registry` "
+                    "e riprova per aggiungere/rimuovere un plugin dal mio database.)",
                     color=self.bot.error_color,
                 )
                 await ctx.send(embed=embed)
@@ -685,7 +688,7 @@ class Plugins(commands.Cog):
         if plugin.name in self.bot.cogs:
             # another class with the same name
             embed = discord.Embed(
-                description="Non è possibile installare questo plugin (dupe cog name).",
+                description="Non è possibile installare questo plugin (c'è un altro plugin con lo stesso nome).",
                 color=self.bot.error_color,
             )
             return await ctx.send(embed=embed)

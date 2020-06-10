@@ -349,7 +349,7 @@ class Modmail(commands.Cog):
         - `{prefix}close Ti contattiamo quando troveremo di piu'.`
 
         Chiudi un thread silenziosamente (niente messaggio)
-        - `{prefix}close silently
+        - `{prefix}close silently`
         - `{prefix}close in 10m silently`
 
         Previeni che il thread venga chiuso:
