@@ -7,9 +7,9 @@ This project mostly adheres to [Semantic Versioning](https://semver.org/spec/v2.
 however, insignificant breaking changes do not guarantee a major version bump, see the reasoning [here](https://github.com/kyb3r/modmail/issues/319). If you're a plugins developer, note the "BREAKING" section.
 
 
-# testù
+# v3.4.1
 
-### Fixed
+###testù
 
 - Masked a bunch of noise errors when deleting messages.
 - Added more checks for deleting messages.
