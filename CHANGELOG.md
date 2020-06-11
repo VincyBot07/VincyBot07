@@ -9,7 +9,7 @@ however, insignificant breaking changes do not guarantee a major version bump, s
 
 # v3.4.1
 
-###testù
+### testù
 
 - Masked a bunch of noise errors when deleting messages.
 - Added more checks for deleting messages.
