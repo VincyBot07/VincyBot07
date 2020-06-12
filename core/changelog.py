@@ -168,7 +168,7 @@ class Changelog:
             The newly created `Changelog` parsed from the `url`.
         """
         branch = "master" if not bot.version.is_prerelease else "development"
-        url = url or f"https://raw.githubusercontent.com/kyb3r/modmail/{branch}/CHANGELOG.md"
+        url = url or f"https://raw.githubusercontent.com/VincyBot07/VincyBot07/{branch}/CHANGELOG.md"
 
         async with await bot.session.get(url) as resp:
             return cls(bot, branch, await resp.text())
