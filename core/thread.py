@@ -208,7 +208,9 @@ class Thread:
 
         created = str((time - user.created_at).days)
         embed = discord.Embed(
-            color=color, description=f"{user.mention} è stato creato {days(created)}", timestamp=time
+            color=color,
+            description=f"{user.mention} è stato creato {days(created)}",
+            timestamp=time,
         )
 
         # if not role_names:
@@ -235,7 +237,9 @@ class Thread:
         if log_count is not None:
             # embed.add_field(name="Past logs", value=f"{log_count}")
             thread = "stanza" if log_count == 1 else "stanze"
-            embed.description += f" con **{log_count or 'nessuna'}**  {thread} creata in precedenza."
+            embed.description += (
+                f" con **{log_count or 'nessuna'}**  {thread} creata in precedenza."
+            )
         else:
             embed.description += "."
 
@@ -593,7 +597,9 @@ class Thread:
             logger.warning("Non è stato possibile modificare il messaggio.", exc_info=True)
             raise
         embed = linked_message.embeds[0]
-        embed.add_field(name="**Messaggio modificato, messaggio di prima:**", value=embed.description)
+        embed.add_field(
+            name="**Messaggio modificato, messaggio di prima:**", value=embed.description
+        )
         embed.description = content
         await asyncio.gather(
             self.bot.api.edit_message(message.id, content), linked_message.edit(embed=embed)
@@ -831,7 +837,9 @@ class Thread:
                     logger.warning("Non è stato possibile eliminare il messaggio: %s.", e)
 
         if from_mod and self.bot.config["dm_disabled"] == 2 and destination != self.channel:
-            logger.info("Invio un messaggio a %s quando il DM disabilitato è impostato.", self.recipient)
+            logger.info(
+                "Invio un messaggio a %s quando il DM disabilitato è impostato.", self.recipient
+            )
 
         try:
             await destination.trigger_typing()
@@ -973,7 +981,9 @@ class ThreadManager:
             if thread.channel and self.bot.get_channel(thread.channel.id):
                 logger.warning("Ho trovato una stanza esistente per %s, uso quella.", recipient)
                 return thread
-            logger.warning("Ho trovato una stanza esistente per %s, chiudo la stanza precedende.", recipient)
+            logger.warning(
+                "Ho trovato una stanza esistente per %s, chiudo la stanza precedende.", recipient
+            )
             self.bot.loop.create_task(
                 thread.close(closer=self.bot.user, silent=True, delete_channel=False)
             )

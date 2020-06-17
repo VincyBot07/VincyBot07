@@ -54,7 +54,8 @@ class HumanTime:
         dt, status = self.calendar.parseDT(argument, sourceTime=now)
         if not status.hasDateOrTime:
             raise BadArgument(
-                'L\'orario specificato non è valido, prova per esempio "tomorrow" oppure "3 days".')
+                'L\'orario specificato non è valido, prova per esempio "tomorrow" oppure "3 days".'
+            )
 
         if not status.hasTime:
             # replace it with the current time
@@ -111,9 +112,8 @@ class UserFriendlyTimeSync(Converter):
 
             match = regex.match(argument)
             if match is not None and match.group(0):
-                data = {k: int(v)
-                        for k, v in match.groupdict(default="0").items()}
-                remaining = argument[match.end():].strip()
+                data = {k: int(v) for k, v in match.groupdict(default="0").items()}
+                remaining = argument[match.end() :].strip()
                 self.dt = self.now + relativedelta(**data)
                 return self.check_constraints(self.now, remaining)
 
@@ -167,14 +167,12 @@ class UserFriendlyTimeSync(Converter):
                 if begin == 1:
                     # check if it's quoted:
                     if argument[0] != '"':
-                        raise BadArgument(
-                            "Expected quote before time input...")
+                        raise BadArgument("Expected quote before time input...")
 
                     if not (end < len(argument) and argument[end] == '"'):
-                        raise BadArgument(
-                            "If the time is quoted, you must unquote it.")
+                        raise BadArgument("If the time is quoted, you must unquote it.")
 
-                    remaining = argument[end + 1:].lstrip(" ,.!")
+                    remaining = argument[end + 1 :].lstrip(" ,.!")
                 else:
                     remaining = argument[end:].lstrip(" ,.!")
             elif len(argument) == end:
@@ -182,8 +180,7 @@ class UserFriendlyTimeSync(Converter):
 
             return self.check_constraints(self.now, remaining)
         except Exception:
-            logger.exception(
-                "Qualcosa è andato storto mentre parsavo il tempo.")
+            logger.exception("Qualcosa è andato storto mentre parsavo il tempo.")
             raise
 
 

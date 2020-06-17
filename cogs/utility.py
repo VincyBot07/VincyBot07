@@ -222,6 +222,7 @@ class ModmailHelpCommand(commands.HelpCommand):
             )
         await self.get_destination().send(embed=embed)
 
+
 class Utility(commands.Cog):
     """Comandi generali che forniscono un utilità."""
 
@@ -255,7 +256,7 @@ class Utility(commands.Cog):
             return await ctx.send(
                 embed=discord.Embed(
                     color=self.bot.error_color,
-                    description=f"La versione specificata \"`{version}`\" non è stata trovata.",
+                    description=f'La versione specificata "`{version}`" non è stata trovata.',
                 )
             )
 
@@ -305,9 +306,7 @@ class Utility(commands.Cog):
             stable = next(
                 filter(lambda v: not parse_version(v.version).is_prerelease, changelog.versions)
             )
-            footer = (
-                f"Sei nella versione di prerilascio • l'ultima versione è v{stable.version}."
-            )
+            footer = f"Sei nella versione di prerilascio • l'ultima versione è v{stable.version}."
         elif self.bot.version < parse_version(latest.version):
             footer = f"Una nuova versione è disponibile v{latest.version}."
         else:
@@ -331,14 +330,12 @@ class Utility(commands.Cog):
         embed.set_footer(text=footer)
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['sponsor'])
+    @commands.command(aliases=["sponsor"])
     @checks.has_permissions(PermissionLevel.REGULAR)
     @utils.trigger_typing
     async def sponsors(self, ctx):
         """Shows a list of sponsors."""
-        resp = await self.bot.session.get(
-            "http://vincysuper07.cf/bot/sponsor.json"
-        )
+        resp = await self.bot.session.get("http://vincysuper07.cf/bot/sponsor.json")
         data = loads(await resp.text())
 
         embeds = []
@@ -518,7 +515,9 @@ class Utility(commands.Cog):
         else:
             msg += f"{activity.name}."
 
-        embed = discord.Embed(title="Attività cambiata", description=msg, color=self.bot.main_color)
+        embed = discord.Embed(
+            title="Attività cambiata", description=msg, color=self.bot.main_color
+        )
         return await ctx.send(embed=embed)
 
     @commands.command()
@@ -680,7 +679,7 @@ class Utility(commands.Cog):
             self.bot.config["prefix"] = prefix
             await self.bot.config.update()
             await ctx.send(embed=embed)
-            #TODO: Impostare prefix multipli
+            # TODO: Impostare prefix multipli
 
     @commands.group(aliases=["configuration"], invoke_without_command=True)
     @checks.has_permissions(PermissionLevel.OWNER)
@@ -741,7 +740,9 @@ class Utility(commands.Cog):
                 embed = exc.embed
         else:
             embed = discord.Embed(
-                title="Errore", color=self.bot.error_color, description=f"{key} non è una chiave valida."
+                title="Errore",
+                color=self.bot.error_color,
+                description=f"{key} non è una chiave valida.",
             )
             valid_keys = [f"`{k}`" for k in sorted(keys)]
             embed.add_field(name="Chiavi valide", value=", ".join(valid_keys))
@@ -763,7 +764,9 @@ class Utility(commands.Cog):
             )
         else:
             embed = discord.Embed(
-                title="Errore", color=self.bot.error_color, description=f"{key} non è una chiave valida."
+                title="Errore",
+                color=self.bot.error_color,
+                description=f"{key} non è una chiave valida.",
             )
             valid_keys = [f"`{k}`" for k in sorted(keys)]
             embed.add_field(name="Valid keys", value=", ".join(valid_keys))
@@ -801,7 +804,9 @@ class Utility(commands.Cog):
                 color=self.bot.main_color,
                 description="Ecco una lista delle configurazioni impostate.",
             )
-            embed.set_author(name="Configurazione/i corrente/i:", icon_url=self.bot.user.avatar_url)
+            embed.set_author(
+                name="Configurazione/i corrente/i:", icon_url=self.bot.user.avatar_url
+            )
             config = self.bot.config.filter_default(self.bot.config)
 
             for name, value in config.items():
@@ -970,7 +975,9 @@ class Utility(commands.Cog):
 
         val = utils.truncate(utils.escape_code_block(val), 2048 - 7)
         embed = discord.Embed(
-            title=f'Alias in codice - "{name}":', description=f"```\n{val}```", color=self.bot.main_color
+            title=f'Alias in codice - "{name}":',
+            description=f"```\n{val}```",
+            color=self.bot.main_color,
         )
 
         return await ctx.send(embed=embed)
@@ -988,7 +995,9 @@ class Utility(commands.Cog):
 
         if len(values) > 25:
             embed = discord.Embed(
-                title="Errore", description="Troppi step, il massimo è 25.", color=self.bot.error_color
+                title="Errore",
+                description="Troppi step, il massimo è 25.",
+                color=self.bot.error_color,
             )
             return embed
 

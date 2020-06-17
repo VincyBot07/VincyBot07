@@ -133,7 +133,7 @@ class ModmailBot(commands.Bot):
         log_level = logging_levels.get(level_text)
         if log_level is None:
             log_level = self.config.remove("log_level")
-            logger.warning("Il livello di logging configurato \"%s\" non è valido.", level_text)
+            logger.warning('Il livello di logging configurato "%s" non è valido.', level_text)
             logger.warning("Uso il livelo di loggind predefinito: INFO.")
         else:
             logger.info("Livello di logging: %s", level_text)
@@ -216,7 +216,8 @@ class ModmailBot(commands.Bot):
                 channel = self.main_category.channels[0]
                 self.config["log_channel_id"] = channel.id
                 logger.warning(
-                    "Non è stato impostato alcun canale di log, imposto #%s come canale di log.", channel.name
+                    "Non è stato impostato alcun canale di log, imposto #%s come canale di log.",
+                    channel.name,
                 )
                 return channel
             except IndexError:
@@ -246,7 +247,7 @@ class ModmailBot(commands.Bot):
         token = self.config["token"]
         if token is None:
             logger.critical(
-                "La configurazione \"TOKEN\" deve essere impostata, impostala con il token del bot che può essere trovato nel Discord Developer Portal."
+                'La configurazione "TOKEN" deve essere impostata, impostala con il token del bot che può essere trovato nel Discord Developer Portal.'
             )
             sys.exit(0)
         return token
@@ -261,7 +262,9 @@ class ModmailBot(commands.Bot):
                 self.config.remove("guild_id")
                 logger.critical("L'ID del server impostato non è valido.")
         else:
-            logger.debug("Non è stato impostato l'ID del server, impostalo riempiendo la configurazione \"GUILD_ID\" con l'ID del tuo server.")
+            logger.debug(
+                "Non è stato impostato l'ID del server, impostalo riempiendo la configurazione \"GUILD_ID\" con l'ID del tuo server."
+            )
         return None
 
     @property
@@ -286,7 +289,7 @@ class ModmailBot(commands.Bot):
         except ValueError:
             pass
         self.config.remove("modmail_guild_id")
-        logger.critical("La configurazione \"MODMAIL_GUILD_ID\" inserita non è valida.")
+        logger.critical('La configurazione "MODMAIL_GUILD_ID" inserita non è valida.')
         return self.guild
 
     @property
@@ -305,7 +308,9 @@ class ModmailBot(commands.Bot):
                 except ValueError:
                     pass
                 self.config.remove("main_category_id")
-                logger.debug("La configurazione \"MAIN_CATEGORY_ID\" non era valida quindi è stata rimossa.")
+                logger.debug(
+                    'La configurazione "MAIN_CATEGORY_ID" non era valida quindi è stata rimossa.'
+                )
             cat = discord.utils.get(self.modmail_guild.categories, name="Modmail")
             if cat is not None:
                 self.config["main_category_id"] = cat.id
@@ -349,7 +354,10 @@ class ModmailBot(commands.Bot):
             try:
                 return PermissionLevel[level.upper()]
             except KeyError:
-                logger.warning("La configurazione \"override_command_level\" per il comando %s non è valida.", command_name)
+                logger.warning(
+                    'La configurazione "override_command_level" per il comando %s non è valida.',
+                    command_name,
+                )
                 self.config["override_command_level"].pop(command_name)
 
         command = self.get_command(command_name)
@@ -404,7 +412,7 @@ class ModmailBot(commands.Bot):
 
     async def on_ready(self):
         """L'avvio del bot."""
-        commands.Bot.remove_command(self,name="help")
+        commands.Bot.remove_command(self, name="help")
         # Wait until config cache is populated with stuff from db and on_connect ran
         await self.wait_for_connected()
 
@@ -448,7 +456,9 @@ class ModmailBot(commands.Bot):
 
             if not thread:
                 # If the channel is deleted
-                logger.debug("Non è stato possibile chiudere la stanza per l'utente %s.", recipient_id)
+                logger.debug(
+                    "Non è stato possibile chiudere la stanza per l'utente %s.", recipient_id
+                )
                 self.config["closures"].pop(recipient_id)
                 await self.config.update()
                 continue
@@ -481,10 +491,13 @@ class ModmailBot(commands.Bot):
                     },
                 )
                 if log_data:
-                    logger.debug("La stanza con canale %s è stata chiusa con successo.", log["channel_id"])
+                    logger.debug(
+                        "La stanza con canale %s è stata chiusa con successo.", log["channel_id"]
+                    )
                 else:
                     logger.debug(
-                        "Non è stato possibile chiudere la stanza con canale %s, salto.", log["channel_id"]
+                        "Non è stato possibile chiudere la stanza con canale %s, salto.",
+                        log["channel_id"],
                     )
 
         self.metadata_loop = tasks.Loop(
@@ -547,10 +560,14 @@ class ModmailBot(commands.Bot):
         if min_account_age > now:
             # User account has not reached the required time
             delta = human_timedelta(min_account_age)
-            logger.debug("L'utente %s è stato bloccato per via dell'età del suo account.", author.name)
+            logger.debug(
+                "L'utente %s è stato bloccato per via dell'età del suo account.", author.name
+            )
 
             if str(author.id) not in self.blocked_users:
-                new_reason = f"Messaggio di sistema: Account nuovo. È richiesto aspettare per {delta}."
+                new_reason = (
+                    f"Messaggio di sistema: Account nuovo. È richiesto aspettare per {delta}."
+                )
                 self.blocked_users[str(author.id)] = new_reason
 
             return False
@@ -576,7 +593,9 @@ class ModmailBot(commands.Bot):
             logger.debug("L'utente %s è stato bloccato per via dell'eta dell'account", author.name)
 
             if str(author.id) not in self.blocked_users:
-                new_reason = f"Messaggio di sistema: Entrato di recende. È richiesto aspettare per {delta}."
+                new_reason = (
+                    f"Messaggio di sistema: Entrato di recende. È richiesto aspettare per {delta}."
+                )
                 self.blocked_users[str(author.id)] = new_reason
 
             return False
@@ -693,7 +712,10 @@ class ModmailBot(commands.Bot):
         if cooldown > now:
             # User messaged before thread cooldown ended
             delta = human_timedelta(cooldown)
-            logger.debug("L'utente %s è stato bloccato per il cooldown della creazione di thread.", author.name)
+            logger.debug(
+                "L'utente %s è stato bloccato per il cooldown della creazione di thread.",
+                author.name,
+            )
             return delta
         return
 
@@ -737,7 +759,8 @@ class ModmailBot(commands.Bot):
                     text=self.config["disabled_new_thread_footer"], icon_url=self.guild.icon_url
                 )
                 logger.info(
-                    "Una nuova stanza da %s non è stata creata per via di funzioni Modmail disabilitate.", message.author
+                    "Una nuova stanza da %s non è stata creata per via di funzioni Modmail disabilitate.",
+                    message.author,
                 )
                 await self.add_reaction(message, blocked_emoji)
                 return await message.channel.send(embed=embed)
@@ -755,7 +778,8 @@ class ModmailBot(commands.Bot):
                     icon_url=self.guild.icon_url,
                 )
                 logger.info(
-                    "Una nuova stanza da %s non è stata creata per via di funzioni Modmail disabilitate.", message.author
+                    "Una nuova stanza da %s non è stata creata per via di funzioni Modmail disabilitate.",
+                    message.author,
                 )
                 await self.add_reaction(message, blocked_emoji)
                 return await message.channel.send(embed=embed)

@@ -205,7 +205,7 @@ class Plugins(commands.Cog):
         if req_txt.exists():
             # Install PIP requirements
 
-            venv = hasattr(sys, "real_prefix") or hasattr(sys, "base_prefix") # in a virtual env
+            venv = hasattr(sys, "real_prefix") or hasattr(sys, "base_prefix")  # in a virtual env
             user_install = " --user" if not venv else ""
             proc = await asyncio.create_subprocess_shell(
                 f"{sys.executable} -m pip install --upgrade{user_install} -r {req_txt} -q -q",
@@ -223,7 +223,9 @@ class Plugins(commands.Cog):
             if stderr:
                 logger.debug("[stderr]\n%s.", stderr.decode())
                 logger.error(
-                    "Non è stato possibile scaricare i requisiti per %s.", plugin.ext_string, exc_info=True
+                    "Non è stato possibile scaricare i requisiti per %s.",
+                    plugin.ext_string,
+                    exc_info=True,
                 )
                 raise InvalidPluginError(
                     f"Non è stato possibile scaricare i requisiti: ```\n{stderr.decode()}\n```"
@@ -234,12 +236,16 @@ class Plugins(commands.Cog):
 
         try:
             self.bot.load_extension(plugin.ext_string)
-            logger.info("Il plugin \"%s\" è stato caricato.", plugin.ext_string.split(".")[-1])
+            logger.info('Il plugin "%s" è stato caricato.', plugin.ext_string.split(".")[-1])
             self.loaded_plugins.add(plugin)
 
         except commands.ExtensionError as exc:
-            logger.error("Non è stato possibile caricare il plugin: %s", plugin.ext_string, exc_info=True)
-            raise InvalidPluginError("Non è stato possibile caricare l'estensione, il plugin non è valido.") from exc
+            logger.error(
+                "Non è stato possibile caricare il plugin: %s", plugin.ext_string, exc_info=True
+            )
+            raise InvalidPluginError(
+                "Non è stato possibile caricare l'estensione, il plugin non è valido."
+            ) from exc
 
     async def parse_user_input(self, ctx, plugin_name, check_version=False):
 
@@ -657,7 +663,8 @@ class Plugins(commands.Cog):
 
         paginator = EmbedPaginatorSession(ctx, *embeds)
         await paginator.run()
-# vplugins inizia qui
+
+    # vplugins inizia qui
     @commands.group(aliases=["vplugin"], invoke_without_command=True)
     @checks.has_permissions(PermissionLevel.OWNER)
     async def vplugins(self, ctx):
@@ -694,8 +701,7 @@ class Plugins(commands.Cog):
             return await ctx.send(embed=embed)
 
         embed = discord.Embed(
-            description=f"Sto scaricando il plugin da {plugin.link}...",
-            color=self.bot.main_color,
+            description=f"Sto scaricando il plugin da {plugin.link}...", color=self.bot.main_color,
         )
         msg = await ctx.send(embed=embed)
 
@@ -721,7 +727,9 @@ class Plugins(commands.Cog):
             try:
                 await self.load_plugin(plugin)
             except Exception:
-                logger.warning("Non è stato possibile caricare il plugin %s.", plugin, exc_info=True)
+                logger.warning(
+                    "Non è stato possibile caricare il plugin %s.", plugin, exc_info=True
+                )
 
                 embed = discord.Embed(
                     description="Non è stato possibile scaricare il plugin, controlla i log per l'errore.",
@@ -730,8 +738,7 @@ class Plugins(commands.Cog):
 
             else:
                 embed = discord.Embed(
-                    description="Il plugin è stato installato!",
-                    color=self.bot.main_color,
+                    description="Il plugin è stato installato!", color=self.bot.main_color,
                 )
         else:
             embed = discord.Embed(
@@ -806,7 +813,8 @@ class Plugins(commands.Cog):
                 await self.load_plugin(plugin)
             logger.debug("Il plugin %s è stato aggiornato.", vplugin_name)
             embed = discord.Embed(
-                description=f"Il plugin {plugin.name} è stato aggiornato.", color=self.bot.main_color
+                description=f"Il plugin {plugin.name} è stato aggiornato.",
+                color=self.bot.main_color,
             )
             return await ctx.send(embed=embed)
 
@@ -849,7 +857,8 @@ class Plugins(commands.Cog):
 
         if not self.loaded_plugins:
             embed = discord.Embed(
-                description="Al momento nessun plugin è stato caricato.", color=self.bot.error_color
+                description="Al momento nessun plugin è stato caricato.",
+                color=self.bot.error_color,
             )
             return await ctx.send(embed=embed)
 
@@ -1015,6 +1024,7 @@ class Plugins(commands.Cog):
 
         paginator = EmbedPaginatorSession(ctx, *embeds)
         await paginator.run()
+
 
 def setup(bot):
     bot.add_cog(Plugins(bot))

@@ -161,7 +161,9 @@ class Modmail(commands.Cog):
             embed = discord.Embed(
                 color=self.bot.error_color, description="Non hai nessuno snippet al momento."
             )
-            embed.set_footer(text=f'Controlla "{self.bot.prefix}help snippet add" per aggiungere uno snippet.')
+            embed.set_footer(
+                text=f'Controlla "{self.bot.prefix}help snippet add" per aggiungere uno snippet.'
+            )
             embed.set_author(name="Snippet", icon_url=ctx.guild.icon_url)
             return await ctx.send(embed=embed)
 
@@ -328,7 +330,9 @@ class Modmail(commands.Cog):
         if after.arg and not silent:
             embed.add_field(name="Messaggio", value=after.arg)
 
-        embed.set_footer(text="La chiusura verra' cancellata se un messaggio sul thread e' inviato.")
+        embed.set_footer(
+            text="La chiusura verra' cancellata se un messaggio sul thread e' inviato."
+        )
         embed.timestamp = after.dt
 
         await ctx.send(embed=embed)
@@ -370,7 +374,8 @@ class Modmail(commands.Cog):
             if thread.close_task is not None or thread.auto_close_task is not None:
                 await thread.cancel_closure(all=True)
                 embed = discord.Embed(
-                    color=self.bot.error_color, description="La chiusura programmata e' stata appena cancellata."
+                    color=self.bot.error_color,
+                    description="La chiusura programmata e' stata appena cancellata.",
                 )
             else:
                 embed = discord.Embed(
@@ -886,7 +891,8 @@ class Modmail(commands.Cog):
 
         if user.bot:
             embed = discord.Embed(
-                color=self.bot.error_color, description="Non si puo' iniziare un thread con un bot."
+                color=self.bot.error_color,
+                description="Non si puo' iniziare un thread con un bot.",
             )
             return await ctx.send(embed=embed)
 
@@ -922,7 +928,9 @@ class Modmail(commands.Cog):
     async def blocked(self, ctx):
         """Ottieni una lista di utenti bloccati."""
 
-        embeds = [discord.Embed(title="Utenti bloccati", color=self.bot.main_color, description="")]
+        embeds = [
+            discord.Embed(title="Utenti bloccati", color=self.bot.main_color, description="")
+        ]
 
         users = []
 
@@ -1130,7 +1138,9 @@ class Modmail(commands.Cog):
                 )
         else:
             embed = discord.Embed(
-                title="Errore", description=f"{mention} non e' bloccato.", color=self.bot.error_color
+                title="Errore",
+                description=f"{mention} non e' bloccato.",
+                color=self.bot.error_color,
             )
 
         return await ctx.send(embed=embed)
@@ -1188,7 +1198,9 @@ class Modmail(commands.Cog):
         )
         if thread is not None:
             logger.debug("Trovato thread con ID tamperato.")
-            await ctx.channel.edit(reason="Sistemazione thread Modmail rovinato", topic=f"User ID: {user_id}")
+            await ctx.channel.edit(
+                reason="Sistemazione thread Modmail rovinato", topic=f"User ID: {user_id}"
+            )
             return await self.bot.add_reaction(ctx.message, sent_emoji)
 
         # trovando il messaggio della genesi per ritrovare l'ID utente
@@ -1212,9 +1224,7 @@ class Modmail(commands.Cog):
                             self.bot.threads, recipient, ctx.channel
                         )
                     thread.ready = True
-                    logger.info(
-                        "Impostato topic canale corrente a User ID e creato nuovo thread."
-                    )
+                    logger.info("Impostato topic canale corrente a User ID e creato nuovo thread.")
                     await ctx.channel.edit(
                         reason="Sistemazione thread Modmail rovinato", topic=f"User ID: {user_id}"
                     )
@@ -1267,7 +1277,9 @@ class Modmail(commands.Cog):
                 thread.ready = True
                 logger.info("Impostato il topic canale a User ID e creato nuovo canale.")
                 await ctx.channel.edit(
-                    reason="Sistemazione thread Modmail rovinato", name=name, topic=f"User ID: {user.id}"
+                    reason="Sistemazione thread Modmail rovinato",
+                    name=name,
+                    topic=f"User ID: {user.id}",
                 )
                 return await self.bot.add_reaction(ctx.message, sent_emoji)
 

@@ -117,8 +117,7 @@ class ConfigManager:
 
     colors = {"mod_color", "recipient_color", "main_color", "error_color"}
 
-    time_deltas = {"account_age", "guild_age",
-                   "thread_auto_close", "thread_cooldown"}
+    time_deltas = {"account_age", "guild_age", "thread_auto_close", "thread_cooldown"}
 
     booleans = {
         "user_typing",
@@ -149,11 +148,9 @@ class ConfigManager:
         data = deepcopy(self.defaults)
 
         # populate from env var and .env file
-        data.update({k.lower(): v for k, v in os.environ.items()
-                     if k.lower() in self.all_keys})
+        data.update({k.lower(): v for k, v in os.environ.items() if k.lower() in self.all_keys})
         config_json = os.path.join(
-            os.path.dirname(os.path.dirname(
-                os.path.abspath(__file__))), "config.json"
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.json"
         )
         if os.path.exists(config_json):
             logger.debug("Sto caricando gli environment da config.json.")
@@ -169,7 +166,9 @@ class ConfigManager:
                     )
                 except json.JSONDecodeError:
                     logger.critical(
-                        "Non è stato possibile caricare gli environment da config.json.", exc_info=True)
+                        "Non è stato possibile caricare gli environment da config.json.",
+                        exc_info=True,
+                    )
         self._cache = data
 
         config_help_json = os.path.join(
@@ -281,13 +280,11 @@ class ConfigManager:
                 if len(hex_) == 3:
                     hex_ = "".join(s for s in hex_ for _ in range(2))
                 if len(hex_) != 6:
-                    raise InvalidConfigError(
-                        "Nome o codice esadecimale non valido.")
+                    raise InvalidConfigError("Nome o codice esadecimale non valido.")
                 try:
                     int(hex_, 16)
                 except ValueError:
-                    raise InvalidConfigError(
-                        "Nome o codice esadecimale non valido.")
+                    raise InvalidConfigError("Nome o codice esadecimale non valido.")
 
             except InvalidConfigError:
                 name = str(item).lower()
