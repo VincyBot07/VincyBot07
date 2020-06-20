@@ -1,10 +1,10 @@
 # Changelog
 
 Tutti i cambiamenti verranno messi in questo file.
-Questo formato è basato su [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
+Questo formato è basato su [Keep a Changelog](https://keepachangelog.com/it/1.0.0/). Questo progetto aderisce anche a [Semantic Versioning](https://semver.org/lang/it/).
 Se sei uno sviluppatore di plugin, controlla la sezione "Rovinato".
 
-# v0.1.0
+# v1.0.0
 
 ### Aggiunto
 - Comando per caricare testo su Hastebin.
