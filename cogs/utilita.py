@@ -71,8 +71,8 @@ class ModmailHelpCommand(commands.HelpCommand):
             embed.set_author(name=name + continued, icon_url=bot.user.avatar_url)
 
             embed.set_footer(
-                text=f'Scrivi il comando "{prefix}{self.command_attrs["name"]}" '
-                "per informazioni comando specifico."
+                text=f'Usa le frecce per cambiare pagina. • Scrivi il comando "{prefix}{self.command_attrs["name"]}" '
+                "per informazioni comando specifico. • Prefix: {prefix}"
             )
             embeds.append(embed)
         return embeds
