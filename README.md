@@ -1,3 +1,2 @@
 # VincyBot07
-# VincyBot07
-# VincyBot07
+Un bot ricco di funzionalità basato su Modmail.
