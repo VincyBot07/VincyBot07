@@ -17,6 +17,7 @@ Se sei uno sviluppatore di plugin, controlla la sezione "Rovinato".
 
 ### Rovinato
 - Se manca un plugin tra `tag` e `divertimento`, allora il comando help potrebbe non funzionare.
+- Il comando help per un comando non funziona, questo è perchè ho modificato il comando.
 
 # v0.0.0
 
