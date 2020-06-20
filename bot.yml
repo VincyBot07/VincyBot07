@@ -1,0 +1,5 @@
+apps:
+  script: '/bin/bash'
+  name: 'canary'
+  args: ['-c', 'pipenv run python3.7 bot.py']
+ 

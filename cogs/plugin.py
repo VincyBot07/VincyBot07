@@ -30,7 +30,7 @@ class InvalidPluginError(commands.BadArgument):
     pass
 
 
-class Plugin:
+class Plugina:
     def __init__(self, user, repo, name, branch=None):
         self.user = user
         self.repo = repo
@@ -73,7 +73,7 @@ class Plugin:
         else:
             m = match(r"^(.+?)/(.+?)/(.+?)@(.+?)$", s)
         if m is not None:
-            return Plugin(*m.groups())
+            return Plugina(*m.groups())
         raise InvalidPluginError("Cannot decipher %s.", s)  # pylint: disable=raising-format-tuple
 
     def __hash__(self):
@@ -83,10 +83,10 @@ class Plugin:
         return f"<Plugins: {self.__str__()}>"
 
     def __eq__(self, other):
-        return isinstance(other, Plugin) and self.__str__() == other.__str__()
+        return isinstance(other, Plugina) and self.__str__() == other.__str__()
 
 
-class Plugins(commands.Cog):
+class Plugin(commands.Cog):
     """
     I plugin espandono le funzionalità del VincyBot07 aggiungendo estensioni di terze parti.
 
@@ -125,24 +125,24 @@ class Plugins(commands.Cog):
 
         for plugin_name in list(self.bot.config["plugins"]):
             try:
-                plugin = Plugin.from_string(plugin_name, strict=True)
+                plugin = Plugina.from_string(plugin_name, strict=True)
             except InvalidPluginError:
                 self.bot.config["plugins"].remove(plugin_name)
                 try:
                     # For backwards compat
-                    plugin = Plugin.from_string(plugin_name)
+                    plugin = Plugina.from_string(plugin_name)
                 except InvalidPluginError:
                     logger.error("Failed to parse plugin name: %s.", plugin_name, exc_info=True)
                     continue
 
         for vplugin_name in list(self.bot.config["plugins"]):
             try:
-                plugin = Plugin.from_string(vplugin_name, strict=True)
+                plugin = Plugina.from_string(vplugin_name, strict=True)
             except InvalidPluginError:
                 self.bot.config["plugins"].remove(vplugin_name)
                 try:
                     # For backwards compat
-                    plugin = Plugin.from_string(vplugin_name)
+                    plugin = Plugina.from_string(vplugin_name)
                 except InvalidPluginError:
                     logger.error("Failed to parse plugin name: %s.", vplugin_name, exc_info=True)
                     continue
@@ -274,11 +274,11 @@ class Plugins(commands.Cog):
                     await ctx.send(embed=embed)
                     return
 
-            plugin = Plugin(user, repo, plugin_name, branch)
+            plugin = Plugina(user, repo, plugin_name, branch)
 
         else:
             try:
-                plugin = Plugin.from_string(plugin_name)
+                plugin = Plugina.from_string(plugin_name)
             except InvalidPluginError:
                 embed = discord.Embed(
                     description="Il nome del plugin non è valido, ricontrolla il nome del plugin "
@@ -570,7 +570,7 @@ class Plugins(commands.Cog):
             user, repo = details["repository"].split("/", maxsplit=1)
             branch = details.get("branch")
 
-            plugin = Plugin(user, repo, name, branch)
+            plugin = Plugina(user, repo, name, branch)
 
             embed = discord.Embed(
                 color=self.bot.main_color,
@@ -629,7 +629,7 @@ class Plugins(commands.Cog):
             user, repo = details["repository"].split("/", maxsplit=1)
             branch = details.get("branch")
 
-            plugin = Plugin(user, repo, plugin_name, branch)
+            plugin = Plugina(user, repo, plugin_name, branch)
 
             desc = discord.utils.escape_markdown(details["description"].replace("\n", ""))
 
@@ -931,7 +931,7 @@ class Plugins(commands.Cog):
             user, repo = details["repository"].split("/", maxsplit=1)
             branch = details.get("branch")
 
-            plugin = Plugin(user, repo, name, branch)
+            plugin = Plugina(user, repo, name, branch)
 
             embed = discord.Embed(
                 color=self.bot.main_color,
@@ -990,7 +990,7 @@ class Plugins(commands.Cog):
             user, repo = details["repository"].split("/", maxsplit=1)
             branch = details.get("branch")
 
-            plugin = Plugin(user, repo, vplugin_name, branch)
+            plugin = Plugina(user, repo, vplugin_name, branch)
 
             desc = discord.utils.escape_markdown(details["description"].replace("\n", ""))
 
@@ -1027,4 +1027,4 @@ class Plugins(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Plugins(bot))
+    bot.add_cog(Plugin(bot))

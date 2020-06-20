@@ -88,10 +88,10 @@ class ModmailHelpCommand(commands.HelpCommand):
         bot = self.context.bot
 
         # always come first
-        default_cogs = [bot.get_cog("Modmail"), bot.get_cog("Utility"), bot.get_cog("Plugins")]
+        plg = bot.get_cog
+        default_cogs = [plg("Tag"), plg("Divertimento"), plg("Utilita"), plg("Plugin")]
 
         default_cogs.extend(c for c in cogs if c not in default_cogs)
-
         for cog in default_cogs:
             embeds.extend(await self.format_cog_help(cog))
         if no_cog_commands:
@@ -122,7 +122,8 @@ class ModmailHelpCommand(commands.HelpCommand):
         return embed, perm_level
 
     async def send_command_help(self, command):
-        topic = await self._get_help_embed(command)
+        topic = await self._get_help_embed
+        (command)
         if topic is not None:
             topic[0].set_footer(text=f"Livello di permessi: {topic[1]}")
             await self.get_destination().send(embed=topic[0])
@@ -182,7 +183,7 @@ class ModmailHelpCommand(commands.HelpCommand):
             else:
                 if len(values) == 1:
                     embed = discord.Embed(
-                        title=f"{command} è un alias.", color=self.context.bot.main_color
+                        title=f"{command} è un alias.", color=discord.Color.blurple()
                     )
                     embed.add_field(name=f"`{command}` punta a:", value=values[0])
                 else:
@@ -223,7 +224,7 @@ class ModmailHelpCommand(commands.HelpCommand):
         await self.get_destination().send(embed=embed)
 
 
-class Utility(commands.Cog):
+class Utilita(commands.Cog):
     """Comandi generali che forniscono un utilità."""
 
     def __init__(self, bot):
@@ -1767,6 +1768,29 @@ class Utility(commands.Cog):
                             break
                         await ctx.send(f"```py\n{page}\n```")
 
+    @commands.command()
+    @checks.has_permissions(PermissionLevel.REGULAR)
+    async def hastebin(self, ctx, *, message):
+        """Carica il testo su Hastebin"""
+        haste_url = os.environ.get("HASTE_URL", "https://hastebin.com")
+
+        try:
+            async with self.bot.session.post(haste_url + "/documents", data=message) as resp:
+                key = (await resp.json())["key"]
+                embed = discord.Embed(
+                    title="Il file che hai caricato:",
+                    color=self.bot.main_color,
+                    description=f"{haste_url}/" + key,
+                )
+        except (JSONDecodeError, ClientResponseError, IndexError):
+            embed = discord.Embed(
+                color=self.bot.main_color,
+                description="C'è stato un problema. "
+                "Non è stato possibile caricare il testo su Hastebin.",
+            )
+            embed.set_footer(text="Hastebin")
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
-    bot.add_cog(Utility(bot))
+    bot.add_cog(Utilita(bot))

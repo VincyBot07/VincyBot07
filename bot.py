@@ -54,7 +54,7 @@ class ModmailBot(commands.Bot):
         self._api = None
         self.metadata_loop = None
         self.formatter = SafeFormatter()
-        self.loaded_cogs = ["cogs.modmail", "cogs.plugins", "cogs.utility"]
+        self.loaded_cogs = ["cogs.modmail", "cogs.plugin", "cogs.utilita"]
         self._connected = asyncio.Event()
         self.start_time = datetime.utcnow()
 
@@ -412,7 +412,7 @@ class ModmailBot(commands.Bot):
 
     async def on_ready(self):
         """L'avvio del bot."""
-        commands.Bot.remove_command(self, name="help")
+        # commands.Bot.remove_command(self, name="help")
         # Wait until config cache is populated with stuff from db and on_connect ran
         await self.wait_for_connected()
 
