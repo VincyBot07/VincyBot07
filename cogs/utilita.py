@@ -72,7 +72,7 @@ class ModmailHelpCommand(commands.HelpCommand):
 
             embed.set_footer(
                 text=f'Usa le frecce per cambiare pagina. • Scrivi il comando "{prefix}{self.command_attrs["name"]}" '
-                "per informazioni comando specifico. • Prefix: {prefix}"
+                f"per informazioni comando specifico. • Prefix: {prefix}"
             )
             embeds.append(embed)
         return embeds
