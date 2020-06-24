@@ -3,6 +3,14 @@
 Tutti i cambiamenti verranno messi in questo file.
 Questo formato è basato su [Keep a Changelog](https://keepachangelog.com/it/1.0.0/). Questo progetto aderisce anche a [Semantic Versioning](https://semver.org/lang/it/).
 Se sei uno sviluppatore di plugin, controlla la sezione "Rovinato".
+# v1.0.1
+
+### Aggiunto
+Un nuovo script nel  codice che permette di aggiungere il bot al vostro VPS (farò il wiki prossimamente).
+
+### Fixato
+- Comando help per un comando.
+
 
 # v1.0.0
 
