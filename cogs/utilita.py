@@ -29,8 +29,7 @@ from core import utils
 
 logger = getLogger(__name__)
 
-
-class ModmailHelpCommand(commands.HelpCommand):
+class ComandoHelp(commands.HelpCommand):
     async def format_cog_help(self, cog, *, no_cog=False):
         bot = self.context.bot
         prefix = self.clean_prefix
@@ -60,19 +59,19 @@ class ModmailHelpCommand(commands.HelpCommand):
             description = (
                 cog.description or "Nessuna descrizione."
                 if not no_cog
-                else "Svariati comandi senza categoria."
+                else "Comandi svariati senza categoria."
             )
             embed = discord.Embed(description=f"*{description}*", color=bot.main_color)
 
-            embed.add_field(name="Comandi", value=format_ or "Nessun comando.")
+            embed.add_field(name="Comandi", value=format_ or "Nessun comando")
 
             continued = " (Continuato)" if embeds else ""
-            name = cog.qualified_name + " - Comandi" if not no_cog else "Comandi vari"
+            name = cog.qualified_name + " - Comandi" if not no_cog else "Comandi svariati"
             embed.set_author(name=name + continued, icon_url=bot.user.avatar_url)
 
             embed.set_footer(
-                text=f'Usa le frecce per cambiare pagina. "{prefix}{self.command_attrs["name"]}" '
-                f"• Prefix: {prefix}"
+                text=f"Usa le frecce per cambiare pagina"
+                f" • Prefix: {prefix}."
             )
             embeds.append(embed)
         return embeds
@@ -88,10 +87,10 @@ class ModmailHelpCommand(commands.HelpCommand):
         bot = self.context.bot
 
         # always come first
-        plg = bot.get_cog
-        default_cogs = [plg("Tag"), plg("Divertimento"), plg("Utilita"), plg("Plugin")]
+        default_cogs = [bot.get_cog("Divertimento"), bot.get_cog("Tag"), bot.get_cog("Utilita")]
 
         default_cogs.extend(c for c in cogs if c not in default_cogs)
+
         for cog in default_cogs:
             embeds.extend(await self.format_cog_help(cog))
         if no_cog_commands:
@@ -122,10 +121,9 @@ class ModmailHelpCommand(commands.HelpCommand):
         return embed, perm_level
 
     async def send_command_help(self, command):
-        topic = await self._get_help_embed
-        (command)
+        topic = await self._get_help_embed(command)
         if topic is not None:
-            topic[0].set_footer(text=f"Livello di permessi: {topic[1]}")
+            topic[0].set_footer(text=f"Livello di permesso: {topic[1]}")
             await self.get_destination().send(embed=topic[0])
 
     async def send_group_help(self, group):
@@ -133,7 +131,7 @@ class ModmailHelpCommand(commands.HelpCommand):
         if topic is None:
             return
         embed = topic[0]
-        embed.add_field(name="Livello di permessi", value=topic[1], inline=False)
+        embed.add_field(name="Livello di permesso", value=topic[1], inline=False)
 
         format_ = ""
         length = len(group.commands)
@@ -149,10 +147,10 @@ class ModmailHelpCommand(commands.HelpCommand):
                 branch = "├─"
             format_ += f"`{branch} {command.name}` - {command.short_doc}\n"
 
-        embed.add_field(name="Sotto-comandi", value=format_[:1024], inline=False)
+        embed.add_field(name="Sotto-Comando/i", value=format_[:1024], inline=False)
         embed.set_footer(
-            text=f'Scrivi il comando "{self.clean_prefix}{self.command_attrs["name"]}" '
-            "per più informazioni riguardo un comando."
+            text=f'Scrivi "{self.clean_prefix}{self.command_attrs["name"]} comando" '
+            "per altre informazioni riguardo un comando."
         )
 
         await self.get_destination().send(embed=embed)
@@ -175,7 +173,8 @@ class ModmailHelpCommand(commands.HelpCommand):
                 embed = discord.Embed(
                     title="Errore",
                     color=self.context.bot.error_color,
-                    description=f"L'alias `{command}` non è valido e verrà eliminato",
+                    description=f"L'alias `{command}` non è valido e ora verrà eliminato."
+                    "Questo alias verrà eliminato.",
                 )
                 embed.add_field(name=f"{command}` era:", value=val)
                 self.context.bot.aliases.pop(command)
@@ -183,28 +182,28 @@ class ModmailHelpCommand(commands.HelpCommand):
             else:
                 if len(values) == 1:
                     embed = discord.Embed(
-                        title=f"{command} è un alias.", color=discord.Color.blurple()
+                        title=f"{command} è un alias.", color=self.context.bot.main_color
                     )
                     embed.add_field(name=f"`{command}` punta a:", value=values[0])
                 else:
                     embed = discord.Embed(
                         title=f"{command} è un alias.",
                         color=self.context.bot.main_color,
-                        description=f"**`{command}` punta a i seguenti step:**",
+                        description=f"**`{command}` punta a questi step:**",
                     )
                     for i, val in enumerate(values, start=1):
                         embed.add_field(name=f"Step {i}:", value=val)
 
             embed.set_footer(
-                text=f'Scrivi l\'alias "{self.clean_prefix}{self.command_attrs["name"]} " '
-                "per più dettagli riguardo un alias."
+                text=f'Scrivi "{self.clean_prefix}{self.command_attrs["name"]} alias" '
+                "per altri dettagli sugli alias."
             )
             return await self.get_destination().send(embed=embed)
 
         logger.warning("CommandNotFound: %s", error)
 
         embed = discord.Embed(color=self.context.bot.error_color)
-        embed.set_footer(text=f'Il comando/La categoria "{command}" non è stato/a trovato/a.')
+        embed.set_footer(text=f'Comando/Categoria "{command}" non trovato/a.')
 
         choices = set()
 
@@ -216,13 +215,12 @@ class ModmailHelpCommand(commands.HelpCommand):
         if closest:
             embed.add_field(name="Forse intendevi:", value="\n".join(f"`{x}`" for x in closest))
         else:
-            embed.title = "Non è stato possibile trovare il comando o la categoria specificata."
+            embed.title = "Impossibile trovare il comando o la categoria"
             embed.set_footer(
                 text=f'Scrivi "{self.clean_prefix}{self.command_attrs["name"]}" '
-                "Per una lista di tutti i comandi disponibili."
+                "per una lista di comandi disponibili."
             )
         await self.get_destination().send(embed=embed)
-
 
 class Utilita(commands.Cog):
     """Comandi generali che forniscono un utilità."""
@@ -230,10 +228,10 @@ class Utilita(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._original_help_command = bot.help_command
-        self.bot.help_command = ModmailHelpCommand(
+        self.bot.help_command = ComandoHelp(
             verify_checks=False,
             command_attrs={
-                "helpmod": "Mostra questo messaggio.",
+                "help": "Mostra questo messaggio.",
                 "checks": [checks.has_permissions_predicate(PermissionLevel.REGULAR)],
             },
         )
