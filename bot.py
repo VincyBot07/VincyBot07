@@ -47,7 +47,7 @@ if not os.path.exists(temp_dir):
     os.mkdir(temp_dir)
 
 
-class ModmailBot(commands.Bot):
+class VincyBot07(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=None)  # implemented in `get_prefix`
         self._session = None
@@ -1259,7 +1259,7 @@ def main():
     except ImportError:
         pass
 
-    bot = ModmailBot()
+    bot = VincyBot07()
     bot.run()
 
 

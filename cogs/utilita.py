@@ -222,7 +222,7 @@ class ComandoHelp(commands.HelpCommand):
             )
         await self.get_destination().send(embed=embed)
 
-class Utilita(commands.Cog):
+class Utilita(commands.Cog, name="Utilità"):
     """Comandi generali che forniscono un utilità."""
 
     def __init__(self, bot):
