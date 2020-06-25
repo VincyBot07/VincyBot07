@@ -1,4 +1,4 @@
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 import asyncio
@@ -68,14 +68,14 @@ class ModmailBot(commands.Bot):
 
         mongo_uri = self.config["mongo_uri"]
         if mongo_uri is None:
-            logger.critical("A Mongo URI is necessary for the bot to function.")
+            logger.critical("Un Mongo URI è necessario per il funzionamento del bot.")
             raise RuntimeError
 
         try:
             self.db = AsyncIOMotorClient(mongo_uri).modmail_bot
         except ConfigurationError as e:
             logger.critical(
-                "Your MONGO_URI might be copied wrong, try re-copying from the source again. "
+                "Il tuo MONGO_URI potrebbe essere copiato male, prova a ri-copiarlo dalla sorgente. "
                 "Otherwise noted in the following message:"
             )
             logger.critical(e)
