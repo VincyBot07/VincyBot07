@@ -1,6 +1,6 @@
 FROM python:3.7-alpine
-WORKDIR /modmailbot
-COPY . /modmailbot
+WORKDIR /vincybot07
+COPY . /vincybot07
 RUN  export PIP_NO_CACHE_DIR=false \
     && apk update \
     && apk add --update --no-cache --virtual .build-deps alpine-sdk \
