@@ -29,6 +29,7 @@ from core import utils
 
 logger = getLogger(__name__)
 
+
 class ComandoHelp(commands.HelpCommand):
     async def format_cog_help(self, cog, *, no_cog=False):
         bot = self.context.bot
@@ -69,10 +70,7 @@ class ComandoHelp(commands.HelpCommand):
             name = cog.qualified_name + " - Comandi" if not no_cog else "Comandi svariati"
             embed.set_author(name=name + continued, icon_url=bot.user.avatar_url)
 
-            embed.set_footer(
-                text=f"Usa le frecce per cambiare pagina"
-                f" • Prefix: {prefix}."
-            )
+            embed.set_footer(text=f"Usa le frecce per cambiare pagina" f" • Prefix: {prefix}.")
             embeds.append(embed)
         return embeds
 
@@ -221,6 +219,7 @@ class ComandoHelp(commands.HelpCommand):
                 "per una lista di comandi disponibili."
             )
         await self.get_destination().send(embed=embed)
+
 
 class Utilita(commands.Cog, name="Utilità"):
     """Comandi generali che forniscono un utilità."""
