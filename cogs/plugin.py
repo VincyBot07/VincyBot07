@@ -10,8 +10,8 @@ from importlib import invalidate_caches
 from difflib import get_close_matches
 from pathlib import Path, PurePath
 from re import match
-from site import USER_SITE
-from subprocess import PIPE
+from site import USER_SITE # nosec
+from subprocess import PIPE # nosec
 
 import discord
 from discord.ext import commands

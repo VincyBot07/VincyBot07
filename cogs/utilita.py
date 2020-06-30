@@ -1728,7 +1728,7 @@ class Utilita(commands.Cog, name="Utilità"):
             return list(filter(lambda a: a != "", pages))
 
         try:
-            exec(to_compile, env)  # pylint: disable=exec-used
+            exec(to_compile, env)  # nosec
         except Exception as exc:
             await ctx.send(f"```py\n{exc.__class__.__name__}: {exc}\n```")
             return await self.bot.add_reaction(ctx.message, "\u2049")
