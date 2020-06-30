@@ -87,7 +87,7 @@ class ComandoHelp(commands.HelpCommand):
         bot = self.context.bot
 
         # always come first
-        default_cogs = [bot.get_cog("Divertimento"), bot.get_cog("Tag"), bot.get_cog("Utilita")]
+        default_cogs = [bot.get_cog("Divertimento"), bot.get_cog("Tag"), bot.get_cog("Utilità")]
 
         default_cogs.extend(c for c in cogs if c not in default_cogs)
 
