@@ -1,2 +1,2 @@
 # VincyBot07
-Un bot ricco di funzionalità basato su Modmail.
+DEPRECATO! Usa [StrapBot](http://github.com/Ergastolator1/StrapBot.git) se vuoi un bot usabile e mantenuto.
